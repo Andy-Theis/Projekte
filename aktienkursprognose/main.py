@@ -2,21 +2,37 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.models import Sequential # pyright: ignore[reportMissingImports]
+from tensorflow.keras.layers import LSTM, Dense # pyright: ignore[reportMissingImports]
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 import yfinance as yf
+import os
+os.environ["YFINANCE_USE_CURL"] = "0"  # Deaktiviert curl_cffi, benutzt requests
+import certifi
+
+# Erzwinge, dass yfinance requests statt curl_cffi benutzt
+os.environ["CURL_CA_BUNDLE"] = certifi.where()
+
+ticker = yf.Ticker("AAPL")
+df = ticker.history(start="2015-01-01", end="2023-12-31")
+print(df.head())
+#df = yf.download("AAPL", start="2015-01-01", end="2023-12-31")
+#print(df.head())
+# Daten vorbereiten
 
 # Daten abrufen (z. B. Apple-Aktie)
-ticker = 'AAPL'
-df = yf.download(ticker, start='2015-01-01', end='2023-12-31')
-df = df[['Close']]
+ticker = 'AAPL' # Ticker anpassen
+df = yf.download(ticker, start='2015-01-01', end='2023-12-31') # Zeitraum anpassen
+df = df[['Close']] # Nur Schlusskurse verwenden
 
 # Daten normalisieren
-scaler = MinMaxScaler()
-scaled_data = scaler.fit_transform(df)
+scaler = MinMaxScaler() # Normalisierung auf den Bereich [0, 1]
+scaled_data = scaler.fit_transform(df) # Reshape für LSTM
 
 # Sequenzen erstellen
-sequence_length = 60
+sequence_length = 60 # Anzahl der Tage für die Sequenz
+# X: Eingabesequenzen, y: Zielwerte
 X, y = [], []
 
 for i in range(sequence_length, len(scaled_data)):

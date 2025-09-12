@@ -1,7 +1,7 @@
 import numpy as np
 import yfinance as yf
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model # pyright: ignore[reportMissingImports]
 
 ticker = 'AAPL'
 model = load_model('lstm_stock_model.h5')
