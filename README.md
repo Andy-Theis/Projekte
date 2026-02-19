@@ -20,4 +20,4 @@ Dieses Repository enthält eine Sammlung von Projekten, die ich im Rahmen meines
 * **Portscanner & Minivirenscanner:** Praktische Tools zur Netzwerkanalyse und zum Verständnis von Signaturprüfung.
 
 ---
-**Kontakt:** [Dein Name] | [Dein LinkedIn-Link]
+**Kontakt:** Andreas Theis | www.linkedin.com/in/andreas-theis-261a46384
